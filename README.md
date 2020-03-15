@@ -13,7 +13,4 @@ After building:
 ```
 java -jar build/libs/barrenland-1.0-SNAPSHOT.jar
 ```
-
-<ctrl>+d to exit
-
-
+ctrl+d to exit
