@@ -5,8 +5,8 @@ import com.target.barrenland.model.BarrenLand;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Stack;
 import java.util.List;
+import java.util.Stack;
 
 public class Solver {
 
@@ -16,6 +16,10 @@ public class Solver {
     public Solver(BarrenLand barrenLand) {
         results = new ArrayList<>();
         this.barrenLand = barrenLand;
+    }
+
+    public List<Integer> getResults() {
+        return results;
     }
 
     public void solve() {
@@ -72,9 +76,3 @@ public class Solver {
         return isWidthInRange(width) && isLengthInRange(length);
     }
 }
-
-
-//solver interfact
-// single method solve
-// recursive
-// non recursive
