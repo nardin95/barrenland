@@ -1,5 +1,7 @@
 package com.target.barrenland.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Data
+@NoArgsConstructor
 public class BarrenLand {
 
     private int width;
@@ -16,26 +20,6 @@ public class BarrenLand {
     public BarrenLand(int width, int length) {
         land = new int[width][length];
         this.width = width;
-        this.length = length;
-    }
-
-    public int[][] getLand() {
-        return land;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setLength(int length) {
         this.length = length;
     }
 
@@ -102,6 +86,4 @@ public class BarrenLand {
         }
         return refinedInput;
     }
-
-
 }
