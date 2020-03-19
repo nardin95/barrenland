@@ -40,12 +40,7 @@ public class Solver {
                     if (grid[lastElementX][lastElementY].getValue() == 0) {
                         fertileLandSize++;
                         grid[lastElementX][lastElementY].setValue(1);
-                        if (grid[lastElementX][lastElementY].getPrev() != null) {
-                            grid[lastElementX][lastElementY].getPrev().setNext(grid[lastElementX][lastElementY].getNext());
-                        }
-                        if (grid[lastElementX][lastElementY].getNext() != null) {
-                            grid[lastElementX][lastElementY].getNext().setPrev(grid[lastElementX][lastElementY].getPrev());
-                        }
+                        grid[lastElementX][lastElementY].delete();
                         if (root.getX() == lastElementX && root.getY() == lastElementY) {
                             root = root.getNext();
                         }

@@ -1,5 +1,7 @@
 package com.target.barrenland.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Data
+@NoArgsConstructor
 public class BarrenLand {
 
     private int width;
@@ -15,37 +19,9 @@ public class BarrenLand {
     private BarrenLandNode root;
 
     public BarrenLand(int width, int length) {
+        this.width = width;
+        this.length = length;
         land = new BarrenLandNode[width][length];
-        this.width = width;
-        this.length = length;
-    }
-
-    public BarrenLandNode[][] getLand() {
-        return land;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public BarrenLandNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(BarrenLandNode root) {
-        this.root = root;
     }
 
     private void populateLand () {
@@ -59,11 +35,11 @@ public class BarrenLand {
                 if (i == 0 && j == 0) {
                     root = bln;
                 } else if (j == 0) {
-                    //left edge
+                    // left edge
                     bln.setPrev(land[i - 1][length - 1]);
                     bln.getPrev().setNext(bln);
                 } else {
-                    //we always have to get prev and set its next to bln
+                    // we always have to get prev and set its next to bln
                     // we also have to set prev
                     bln.setPrev(land[i][j - 1]);
                     bln.getPrev().setNext(bln);
@@ -81,14 +57,7 @@ public class BarrenLand {
                         root = root.getNext();
                     }
                     land[x][y].setValue(-1);
-                    if (land[x][y].getPrev() != null) {
-                        land[x][y].getPrev().setNext(land[x][y].getNext());
-                    }
-                    if (land[x][y].getNext() != null) {
-                        land[x][y].getNext().setPrev(land[x][y].getPrev());
-                    }
-//                    land[x][y].setNext(null);
-//                    land[x][y].setPrev(null);
+                    land[x][y].delete();
                 }
             }
         }
@@ -147,6 +116,4 @@ public class BarrenLand {
         }
         return refinedInput;
     }
-
-
 }
