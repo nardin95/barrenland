@@ -61,9 +61,10 @@ public class BarrenLand {
     private List<List<Integer>> validateAndTranslateInput(String input) {
         List<List<Integer>> refinedInput = new ArrayList<>();
         //make sure empty list of barren land is still valid
-        if(StringUtils.isBlank(input) || "{}".equals(input)) {
+        if(StringUtils.isBlank(input) || "{}".equals(input.trim())) {
             return refinedInput;
         }
+        input=input.trim();
         try {
             if (input.charAt(0) == '{' && input.charAt(input.length() - 1) == '}') {
                 input = input.substring(1, input.length() - 1);

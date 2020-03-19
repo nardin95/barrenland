@@ -38,18 +38,10 @@ public class Solver {
                         if (grid[lastElementX][lastElementY] == 0) {
                             grid[lastElementX][lastElementY] = 1;
                             fertileLandSize++;
-                            if (isInRange(lastElementX, lastElementY+1) && grid[lastElementX][lastElementY+1] == 0) {
-                                stack.push(new int[] {lastElementX, lastElementY+1});
-                            }
-                            if (isInRange(lastElementX, lastElementY-1) && grid[lastElementX][lastElementY-1] == 0) {
-                                stack.push(new int[] {lastElementX, lastElementY-1});
-                            }
-                            if (isInRange(lastElementX+1, lastElementY) && grid[lastElementX+1][lastElementY] == 0) {
-                                stack.push(new int[] {lastElementX+1, lastElementY});
-                            }
-                            if (isInRange(lastElementX-1, lastElementY) && grid[lastElementX-1][lastElementY] == 0) {
-                                stack.push(new int[] {lastElementX-1, lastElementY});
-                            }
+                            pushElement(stack, grid, lastElementX, lastElementY+1);
+                            pushElement(stack, grid, lastElementX, lastElementY-1);
+                            pushElement(stack, grid, lastElementX+1, lastElementY);
+                            pushElement(stack, grid, lastElementX-1, lastElementY);
                         }
                     }
                     results.add(fertileLandSize);
@@ -64,6 +56,12 @@ public class Solver {
             System.out.print(result + " ");
         }
         System.out.println();
+    }
+
+    private void pushElement (Stack<int[]> stack, int[][] grid, int widthX, int lengthY) {
+        if (isInRange(widthX, lengthY) && grid[widthX][lengthY] == 0) {
+            stack.push(new int[] {widthX, lengthY});
+        }
     }
 
     private boolean isWidthInRange (int width) {
