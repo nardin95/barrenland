@@ -60,6 +60,10 @@ public class BarrenLandNode {
         this.y = y;
     }
 
+    public boolean hasNext() {
+        return this.next != null;
+    }
+
     public void delete() {
         prev.setNext(next);
         next.setPrev(prev);

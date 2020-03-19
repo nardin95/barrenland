@@ -2,11 +2,12 @@ package com.target.barrenland.solver;
 
 
 import com.target.barrenland.model.BarrenLand;
+import com.target.barrenland.model.BarrenLandNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Stack;
 import java.util.List;
+import java.util.Stack;
 
 public class Solver {
 
@@ -18,38 +19,47 @@ public class Solver {
         this.barrenLand = barrenLand;
     }
 
-    public void solve() {
-        int[][] grid = barrenLand.getLand();
+    public List<Integer> getResults() {
+        return results;
+    }
 
-        for (int x = 0; x < barrenLand.getWidth(); x++) {
-            for (int y = 0; y < barrenLand.getLength(); y++) {
-                if (grid[x][y] == 0 ) {
-                    int fertileLandSize = 0;
-                    Stack<int[]> stack = new Stack<>();
-                    stack.push(new int[] {x, y});
-                    while (!stack.empty()) {
-                        int[] lastElement = stack.pop();
-                        int lastElementX = lastElement[0];
-                        int lastElementY = lastElement[1];
-                        if (grid[lastElementX][lastElementY] == 0) {
-                            grid[lastElementX][lastElementY] = 1;
-                            fertileLandSize++;
-                            if (isInRange(lastElementX, lastElementY+1) && grid[lastElementX][lastElementY+1] == 0) {
-                                stack.push(new int[] {lastElementX, lastElementY+1});
-                            }
-                            if (isInRange(lastElementX, lastElementY-1) && grid[lastElementX][lastElementY-1] == 0) {
-                                stack.push(new int[] {lastElementX, lastElementY-1});
-                            }
-                            if (isInRange(lastElementX+1, lastElementY) && grid[lastElementX+1][lastElementY] == 0) {
-                                stack.push(new int[] {lastElementX+1, lastElementY});
-                            }
-                            if (isInRange(lastElementX-1, lastElementY) && grid[lastElementX-1][lastElementY] == 0) {
-                                stack.push(new int[] {lastElementX-1, lastElementY});
-                            }
+    public void solve() {
+        BarrenLandNode[][] grid = barrenLand.getLand();
+        BarrenLandNode root = barrenLand.getRoot();
+
+        while (root != null && root.hasNext()) {
+            if (root.getValue() == 0) {
+                int fertileLandSize = 0;
+                Stack<BarrenLandNode> stack = new Stack<>();
+                BarrenLandNode temp = new BarrenLandNode(null, null, root.getX(), root.getY(), root.getValue());
+                stack.push(temp);
+                while (!stack.empty()) {
+                    BarrenLandNode lastElement = stack.pop();
+                    int lastElementX = lastElement.getX();
+                    int lastElementY = lastElement.getY();
+                    if (grid[lastElementX][lastElementY].getValue() == 0) {
+                        fertileLandSize++;
+                        grid[lastElementX][lastElementY].setValue(1);
+                        if (grid[lastElementX][lastElementY].getPrev() != null) {
+                            grid[lastElementX][lastElementY].getPrev().setNext(grid[lastElementX][lastElementY].getNext());
                         }
+                        if (grid[lastElementX][lastElementY].getNext() != null) {
+                            grid[lastElementX][lastElementY].getNext().setPrev(grid[lastElementX][lastElementY].getPrev());
+                        }
+                        if (root.getX() == lastElementX && root.getY() == lastElementY) {
+                            root = root.getNext();
+                        }
+
+                        pushElement(stack, grid, lastElementX, lastElementY+1);
+                        pushElement(stack, grid, lastElementX, lastElementY-1);
+                        pushElement(stack, grid, lastElementX+1, lastElementY);
+                        pushElement(stack, grid, lastElementX-1, lastElementY);
                     }
-                    results.add(fertileLandSize);
                 }
+                results.add(fertileLandSize);
+            }
+            if (root != null) {
+                root = root.getNext();
             }
         }
         Collections.sort(results);
@@ -62,6 +72,12 @@ public class Solver {
         System.out.println();
     }
 
+    private void pushElement (Stack<BarrenLandNode> stack, BarrenLandNode[][] grid, int widthX, int lengthY) {
+        if (isInRange(widthX, lengthY) && grid[widthX][lengthY].getValue() == 0) {
+            stack.push(new BarrenLandNode(null, null, widthX, lengthY, 0));
+        }
+    }
+
     private boolean isWidthInRange (int width) {
         return width >= 0 && width < barrenLand.getWidth();
     }
@@ -72,9 +88,3 @@ public class Solver {
         return isWidthInRange(width) && isLengthInRange(length);
     }
 }
-
-
-//solver interfact
-// single method solve
-// recursive
-// non recursive

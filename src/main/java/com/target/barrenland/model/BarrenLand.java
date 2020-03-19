@@ -1,5 +1,7 @@
 package com.target.barrenland.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,15 +11,16 @@ public class BarrenLand {
 
     private int width;
     private int length;
-    private int[][] land;
+    private BarrenLandNode[][] land;
+    private BarrenLandNode root;
 
     public BarrenLand(int width, int length) {
-        land = new int[width][length];
+        land = new BarrenLandNode[width][length];
         this.width = width;
         this.length = length;
     }
 
-    public int[][] getLand() {
+    public BarrenLandNode[][] getLand() {
         return land;
     }
 
@@ -37,11 +40,55 @@ public class BarrenLand {
         this.length = length;
     }
 
+    public BarrenLandNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(BarrenLandNode root) {
+        this.root = root;
+    }
+
+    private void populateLand () {
+        for(int i=0; i<width; i++) {
+            for (int j = 0; j < length; j++) {
+                BarrenLandNode bln = new BarrenLandNode();
+                bln.setX(i);
+                bln.setY(j);
+                bln.setValue(0);
+                land[i][j] = bln;
+                if (i == 0 && j == 0) {
+                    root = bln;
+                } else if (j == 0) {
+                    //left edge
+                    bln.setPrev(land[i - 1][length - 1]);
+                    bln.getPrev().setNext(bln);
+                } else {
+                    //we always have to get prev and set its next to bln
+                    // we also have to set prev
+                    bln.setPrev(land[i][j - 1]);
+                    bln.getPrev().setNext(bln);
+                }
+            }
+        }
+    }
+
     private void populateBarrenLand(List<List<Integer>> barrenLands) {
+        populateLand();
         for (List<Integer> barrenLand : barrenLands) {
             for (int x = barrenLand.get(0); x <= barrenLand.get(2); x++) {
                 for (int y = barrenLand.get(1); y <= barrenLand.get(3); y++) {
-                    land[x][y] = -1;
+                    if (root.getX() == x && root.getY() == y) {
+                        root = root.getNext();
+                    }
+                    land[x][y].setValue(-1);
+                    if (land[x][y].getPrev() != null) {
+                        land[x][y].getPrev().setNext(land[x][y].getNext());
+                    }
+                    if (land[x][y].getNext() != null) {
+                        land[x][y].getNext().setPrev(land[x][y].getPrev());
+                    }
+//                    land[x][y].setNext(null);
+//                    land[x][y].setPrev(null);
                 }
             }
         }
@@ -58,6 +105,11 @@ public class BarrenLand {
 
     private List<List<Integer>> validateAndTranslateInput(String input) {
         List<List<Integer>> refinedInput = new ArrayList<>();
+        //make sure empty list of barren land is still valid
+        if(StringUtils.isBlank(input) || "{}".equals(input.trim())) {
+            return refinedInput;
+        }
+        input=input.trim();
         try {
             if (input.charAt(0) == '{' && input.charAt(input.length() - 1) == '}') {
                 input = input.substring(1, input.length() - 1);
@@ -72,10 +124,10 @@ public class BarrenLand {
                                 .map(Integer::parseInt)
                                 .collect(Collectors.toList()));
                         if(coords.size() == 4
-                            && coords.get(0) >= 0 && coords.get(0) < width
-                            && coords.get(1) >= 0 && coords.get(1) < length
-                            && coords.get(2) >= coords.get(0) && coords.get(2) < width
-                            && coords.get(3) >= coords.get(1) && coords.get(3) < length) {
+                                && coords.get(0) >= 0 && coords.get(0) < width
+                                && coords.get(1) >= 0 && coords.get(1) < length
+                                && coords.get(2) >= coords.get(0) && coords.get(2) < width
+                                && coords.get(3) >= coords.get(1) && coords.get(3) < length) {
                             refinedInput.add(coords);
                         } else {
                             throw new Exception();
