@@ -27,8 +27,15 @@ public class Solver {
         BarrenLandNode[][] grid = barrenLand.getLand();
         BarrenLandNode root = barrenLand.getRoot();
 
+//        while(root.hasNext()) {
+//            if(root.getValue()!=0) {
+//                System.out.println(root.getValue());
+//            }
+//            root=root.getNext();
+//        }
+
         while (root != null && root.hasNext()) {
-            if (root.getValue() == 0) {
+
                 int fertileLandSize = 0;
                 Stack<BarrenLandNode> stack = new Stack<>();
                 stack.push(root);
@@ -38,8 +45,10 @@ public class Solver {
                     int lastElementY = lastElement.getY();
                     if (grid[lastElementX][lastElementY].getValue() == 0) {
                         fertileLandSize++;
-                        grid[lastElementX][lastElementY].setValue(1);
-                        grid[lastElementX][lastElementY].delete();
+
+                            grid[lastElementX][lastElementY].setValue(1);
+                            grid[lastElementX][lastElementY].delete();
+
                         if (root.getX() == lastElementX && root.getY() == lastElementY) {
                             root = root.getNext();
                         }
@@ -51,7 +60,7 @@ public class Solver {
                     }
                 }
                 results.add(fertileLandSize);
-            }
+
             if (root != null) {
                 root = root.getNext();
             }
@@ -68,7 +77,7 @@ public class Solver {
 
     private void pushElement (Stack<BarrenLandNode> stack, BarrenLandNode[][] grid, int widthX, int lengthY) {
         if (isInRange(widthX, lengthY) && grid[widthX][lengthY].getValue() == 0) {
-            stack.push(new BarrenLandNode(null, null, widthX, lengthY, 0, false));
+            stack.push(grid[widthX][lengthY]);
         }
     }
 

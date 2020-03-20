@@ -22,8 +22,7 @@ ctrl+d to exit
 * Unfortunately my doubly linked list implementation performs worse overall likely due to all the extra heap allocations it requires, but the actual performance of the solver is significantly faster (more than an entire order of magnitude)
 
 ```
-Time to run 100 iterations with doubly linked solver (including time to setup): 2231 ms.
-Time to run 100000 iterations with doubly linked solver (solve time only): 387 ms.
+Time to run 100 iterations with doubly linked solver (including time to setup): 1696 ms.
 
 Time to run 100 iterations with array only solver (including time to setup): 995 ms.
 Time to run 100000 iterations with array only solver (solve time only): 19440 ms.
