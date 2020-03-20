@@ -56,8 +56,11 @@ public class BarrenLand {
                     if (root.getX() == x && root.getY() == y) {
                         root = root.getNext();
                     }
-                    land[x][y].setValue(-1);
-                    land[x][y].delete();
+                    if(!land[x][y].isCounted()) {
+                        land[x][y].setValue(-1);
+                        land[x][y].delete();
+                        land[x][y].setCounted(true);
+                    }
                 }
             }
         }

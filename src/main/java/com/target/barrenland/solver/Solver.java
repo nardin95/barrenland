@@ -31,8 +31,7 @@ public class Solver {
             if (root.getValue() == 0) {
                 int fertileLandSize = 0;
                 Stack<BarrenLandNode> stack = new Stack<>();
-                BarrenLandNode temp = new BarrenLandNode(null, null, root.getX(), root.getY(), root.getValue());
-                stack.push(temp);
+                stack.push(root);
                 while (!stack.empty()) {
                     BarrenLandNode lastElement = stack.pop();
                     int lastElementX = lastElement.getX();
@@ -69,7 +68,7 @@ public class Solver {
 
     private void pushElement (Stack<BarrenLandNode> stack, BarrenLandNode[][] grid, int widthX, int lengthY) {
         if (isInRange(widthX, lengthY) && grid[widthX][lengthY].getValue() == 0) {
-            stack.push(new BarrenLandNode(null, null, widthX, lengthY, 0));
+            stack.push(new BarrenLandNode(null, null, widthX, lengthY, 0, false));
         }
     }
 

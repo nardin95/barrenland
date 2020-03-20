@@ -13,6 +13,7 @@ public class BarrenLandNode {
     private int x;
     private int y;
     private int value;
+    private boolean counted;
 
     public boolean hasNext() {
         return this.next != null;
